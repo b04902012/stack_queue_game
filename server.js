@@ -37,7 +37,7 @@ var srv=http.createServer(async function(req,res){
 })
 srv.listen('8080')
 const ws_srv=new ws.Server({server:srv})
-var socket_table = userList
+var socket_table = new Array(userList.length)
 var cache_data = ""
 var update = data=>{
     cache_data = data
@@ -55,11 +55,12 @@ ws_srv.on('connection',(socket,req)=>{
     var cookie=serverModule.extractCookie(req)
     console.log(cookie)
     var user = userModule.getUser(cookie)
-    if(user.length){
+    if(typeof(user)==='number'){
         socket_table[user].add(socket)
         console.log(req.headers)
-        if(clientSocket.readyState===ws.OPEN&&clientSocket!=socket){
-            clientSocket.send(data)
-        }
+        socket.send(cache_data)
     }
+    socket.on('message',()=>{
+
+    })
 })
