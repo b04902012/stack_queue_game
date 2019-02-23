@@ -6,9 +6,8 @@ var fs=require('fs')
 var router=require('./router')
 var ws=require('ws')
 var serverModule = require('./serverModule')
-var userModule = require('./userModule')
+var User = require('./userModule')
 var userList = require('./userList')
-var User = new userModule()
 
 var srv=http.createServer(async function(req,res){
     console.log(req.url)
