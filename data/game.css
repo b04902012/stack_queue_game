@@ -1,0 +1,9 @@
+.game_container *{
+    font-family:monospace;
+}
+.stack{
+    color:#AAF;
+}
+.queue{
+    color:#AFA;
+}
