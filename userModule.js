@@ -1,6 +1,6 @@
 const userList = require('./userList')
 
-var userModule=()=>{
+var userModule=function(){
     var sessionTable = []
     var sessionSet = new Set()
     for(index in userList)sessionTable[index]=new Set()
@@ -28,6 +28,4 @@ var userModule=()=>{
         }
     }
 }
-module.exports={
-    userModule
-}
+module.exports=userModule
