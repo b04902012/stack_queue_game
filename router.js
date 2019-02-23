@@ -23,10 +23,6 @@ module.exports=async(path,req,res)=>{
             var user_data = extractBody(req)
             var sessionKey = getKey(user_data)
             if(sessionKey){
-                var cookie = {id:
-                response.writeHead(200,{
-                    'Set-Cookie':
-                })
             }
         }
     }
