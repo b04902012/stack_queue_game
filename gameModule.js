@@ -141,6 +141,9 @@ function Game(number_user, operation_sequance, number_sequance, broad_cast, max_
   CheckAndStartNewRound();
 }
 
+module.exports = {
+    Game
+}
 /*
 test = new Game(3, "iio", [-1, -1, -1], (s) => {console.log(s)}, 10)
 test.DoMove(1, "s", 0);

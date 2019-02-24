@@ -6,8 +6,9 @@ var fs=require('fs')
 var router=require('./router')
 var ws=require('ws')
 var serverModule = require('./serverModule')
-var User = require('./userModule')
+var userModule = require('./userModule')
 var userList = require('./userList')
+var gameModule = require('./gameModule')
 
 var srv=http.createServer(async function(req,res){
     console.log(req.url)
@@ -41,15 +42,19 @@ var socket_table = new Array(userList.length)
 var cache_data = ""
 var update = data=>{
     cache_data = data
-    socket_table.foreach(user=>{
-        socket_table[user].foreach(socket=>{
+    socket_table.forEach(socket_set=>{
+        socket_set.forEach(socket=>{
             socket.send(data)
         })
     })
+    console.log(data)
 }
 
 for(var user in userList)
     socket_table[user]=new Set()
+
+// TODO: set game arguments
+var game = new gameModule.Game(3, "iio", [-1, 2, -1], update, 10)
 
 ws_srv.on('connection',(socket,req)=>{
     var cookie=serverModule.extractCookie(req)
@@ -59,8 +64,9 @@ ws_srv.on('connection',(socket,req)=>{
         socket_table[user].add(socket)
         console.log(req.headers)
         socket.send(cache_data)
+        socket.on('message',(message)=>{
+            var request = JSON.parse(message);
+            game.DoMove(user, request[1], request[0]);
+        })
     }
-    socket.on('message',()=>{
-
-    })
 })
