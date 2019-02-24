@@ -12,9 +12,9 @@ var newSession = ()=>{
     return key.toString(16)
 }
 var getUser=(cookie)=>{
-    var id = cookie.id
+    var id = parseInt(cookie.id)
     var key = cookie.key
-    if(sessionTable[id]&&sessionTable[id].has(userKey))
+    if(sessionTable[id]&&sessionTable[id].has(key))
         return id
 }
 var  getKey=(userData)=>{

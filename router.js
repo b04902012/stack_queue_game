@@ -10,8 +10,8 @@ module.exports=async(path,req,res)=>{
     if(req.method==='GET'){
         var cookie = extractCookie(req)
         res.writeHead(200,{'Content-Type':'text/html'})
-        console.log('!')
-        if(typeof(getUser)==='number')
+        console.log(typeof(getUser(cookie)))
+        if(typeof(getUser(cookie))==='number')
             return fs.createReadStream('data/main.html').pipe(res)
         else
             return fs.createReadStream('data/login.html').pipe(res)
@@ -21,7 +21,12 @@ module.exports=async(path,req,res)=>{
         var session = getKey(user_data)
         if(session){
             console.log(session)
-            res.writeHead(200)
+            res.writeHead(200,{
+                'Set-Cookie': [
+                    `id=${session.id}; HttpOnly`,
+                    `key=${session.key}; HttpOnly`,
+                ]
+            })
             return res.end(JSON.stringify(session))
         }
         res.writeHead(401)
