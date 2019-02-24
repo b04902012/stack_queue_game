@@ -9,7 +9,10 @@ module.exports=async(path,req,res)=>{
     if(req.method==='GET'){
         var cookie = extractCookie(req)
         res.writeHead(200,{'Content-Type':'text/html'})
-        fs.createReadStream('data/main.html').pipe(res)
+        if(cookie)
+            fs.createReadStream('data/main.html').pipe(res)
+        else
+            fs.createReadStream('data/login.html').pipe(res)
     }
     else if(req.method==='POST'){
         if(path[0]==='login'){
@@ -26,4 +29,6 @@ module.exports=async(path,req,res)=>{
             return req.end()
         }
     }
+    req.writeHead(404)
+    return req.end()
 }
