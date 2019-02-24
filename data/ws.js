@@ -1,6 +1,6 @@
 var socket
 import getGameNode from './modules/gameNodeModule.js'
-socket=new WebSocket('ws://localhost:8080')
+socket=new WebSocket('ws://'+window.location.hostname+':8080')
 console.log('!')
 socket.onmessage=e=>{
     console.log(e.data)

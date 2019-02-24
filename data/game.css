@@ -3,7 +3,9 @@
 }
 .stack{
     color:#AAF;
+    white-space: pre;
 }
 .queue{
     color:#AFA;
+    white-space: pre;
 }

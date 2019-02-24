@@ -23,7 +23,7 @@ module.exports=async(path,req,res)=>{
             console.log(session)
             res.writeHead(200,{
                 'Set-Cookie': [
-                    `id=${session.id}; HttpOnly`,
+                    `id=${session.id}`,
                     `key=${session.key}; HttpOnly`,
                 ]
             })
