@@ -22,6 +22,7 @@ function User() {
   }
 
   this.PushQueue = (round, x) => {
+    console.log(RoundCheck(round))
     if (!RoundCheck(round))
       return false;
     queue_.push(x);
@@ -79,6 +80,7 @@ function Game(number_user, operation_sequance, number_sequance, broad_cast, max_
     data.p = operation_sequance;
     data.n = number_sequance;
     data.u = cached_user_data_;
+    data.r = current_round_
     return data;
   }
   var SetNewRoundRandomConfigure = () => {

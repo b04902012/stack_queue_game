@@ -1,5 +1,7 @@
 var socket
-import updateGameNode from './gameNodeModule.js'
+import gameNodeModule from './gameNodeModule.js'
+var updateGameNode=gameNodeModule.updateGameNode
+var renderGameNode=gameNodeModule.renderGameNode
 socket=new WebSocket('ws://'+window.location.hostname+':8080')
 console.log('!')
 socket.onmessage=e=>{
@@ -10,7 +12,7 @@ socket.onmessage=e=>{
 }
 
 var send = (round_id, choice) => {
-    var data = JSON.parse([round_id, choice])
+    var data = JSON.stringify([round_id, choice])
     socket.send(data)
 }
 
