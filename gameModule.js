@@ -57,7 +57,6 @@ function User() {
   this.ExportState = (round) => {
     RoundCheck(round);
     let state = {s: stack_, q: queue_, d: round === round_finish_};
-    //return JSON.stringify(state);
     return DeepCopy(state);
   }
 }
@@ -75,12 +74,12 @@ function Game(number_user, operation_sequance, number_sequance, broad_cast, max_
 
   var cached_user_data_ = Array(number_user);
 
-  var GenerateBroadcastDataString = () => {
+  var GenerateBroadcastData = () => {
     var data = {};
     data.p = operation_sequance;
     data.n = number_sequance;
     data.u = cached_user_data_;
-    return JSON.stringify(data);
+    return data;
   }
   var SetNewRoundRandomConfigure = () => {
     if (operation_sequance[current_round_] === "?") {
@@ -103,7 +102,7 @@ function Game(number_user, operation_sequance, number_sequance, broad_cast, max_
       SetNewRoundRandomConfigure()
     for (let i = 0; i < number_user; i++)
       cached_user_data_[i] = user_list_[i].ExportState(current_round_);
-    broad_cast(GenerateBroadcastDataString());
+    broad_cast(GenerateBroadcastData());
   }
 
   this.DoMove = (user_id, container, round_id) => {
@@ -132,7 +131,7 @@ function Game(number_user, operation_sequance, number_sequance, broad_cast, max_
     if (success) {
       finished_user_++;
       cached_user_data_[user_id].d = true;
-      broad_cast(GenerateBroadcastDataString());
+      broad_cast(GenerateBroadcastData());
       if (finished_user_ == number_user)
         CheckAndStartNewRound();
     }

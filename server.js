@@ -10,6 +10,15 @@ var userModule = require('./userModule')
 var userList = require('./userList')
 var gameModule = require('./gameModule')
 
+var kRetryTimeout = 500;
+var kRetryTimes = 5;
+
+// Simple deep copy function, should be good enough
+// https://stackoverflow.com/a/34283281
+function DeepCopy(x) {
+  return JSON.parse(JSON.stringify(x));
+}
+
 var srv=http.createServer(async function(req,res){
     console.log(req.url)
     let pathname=url.parse(req.url).pathname
@@ -36,15 +45,49 @@ var srv=http.createServer(async function(req,res){
         }
     })
 })
+
+var socket_acked_id = new Array(userList.length);
+for (let i = 0; i < socket_acked_id.length; i++)
+    socket_acked_id[i] = {s:new Set(), m: 0};
+var reliable_send = async (socket, user, data) => {
+    var ack_id = socket_acked_id[user].m++;
+    var data_pack = DeepCopy(data);
+    data_pack.id = ack_id;
+    data_pack = JSON.stringify(data_pack);
+    socket.send(data_pack);
+    var retry_count = 0;
+    var interval_id;
+    var retry = () => {
+        console.log('Retry user', user);
+        if (socket_acked_id[user].s.has(ack_id)) {
+            clearInterval(interval_id);
+            socket_acked_id[user].s.delete(ack_id);
+            return;
+        }
+        retry_count++;
+        if (retry_count > kRetryTimes) {
+            clearInterval(interval_id);
+            socket_acked_id[user].s.delete(ack_id);
+            socket.terminate();
+            socket_table[user].delete(socket)
+            return;
+        }
+        // TODO: check if send failed
+        socket.send(data_pack);
+    }
+    interval_id = setInterval(retry, kRetryTimeout);
+}
+console.log(socket_acked_id);
+
 srv.listen('8080')
 const ws_srv=new ws.Server({server:srv})
 var socket_table = new Array(userList.length)
 var cache_data = ""
 var update = data=>{
     cache_data = data
-    socket_table.forEach(socket_set=>{
+    socket_table.forEach((socket_set, id)=>{
         socket_set.forEach(socket=>{
-            socket.send(data)
+            reliable_send(socket, id, data)
         })
     })
     console.log(data)
@@ -63,10 +106,13 @@ ws_srv.on('connection',(socket,req)=>{
     if(typeof(user)==='number'){
         socket_table[user].add(socket)
         console.log(req.headers)
-        socket.send(cache_data)
+        reliable_send(socket, user, cache_data)
         socket.on('message',(message)=>{
             var request = JSON.parse(message);
-            game.DoMove(user, request[1], request[0]);
+            if (typeof(request) === 'number')
+                socket_acked_id[user].add(request);
+            else
+                game.DoMove(user, request[1], request[0]);
         })
    }
 })
