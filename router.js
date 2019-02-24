@@ -5,7 +5,7 @@ var getKey = require('./userModule').getKey
 var getUser = require('./userModule').getUser
 module.exports=async(path,req,res)=>{
     path=path.split('/')
-    console.log(path)
+    console.log('Path:'+path)
     if(req.method==='GET'){
         var cookie = extractCookie(req)
         res.writeHead(200,{'Content-Type':'text/html'})
@@ -19,16 +19,17 @@ module.exports=async(path,req,res)=>{
             var user_data = await extractBody(req)
             var session = getKey(user_data)
             if(session){
-                req.writeHead(200,{
+                res.writeHead(200,{
                     'Set-Cookie': `id=${session.id};key=${session.key}`,
                     'Location': './',
                 })
-                return req.end()
+                return res.end()
             }
-            req.writeHead(401)
-            return req.end()
+            res.writeHead(401)
+            return res.end()
         }
     }
-    req.writeHead(404)
-    return req.end()
+    console.log(res)
+    res.writeHead(404)
+    return res.end()
 }
