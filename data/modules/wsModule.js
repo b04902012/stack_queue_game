@@ -1,5 +1,5 @@
 var socket
-import updateGameNode from './modules/gameNodeModule.js'
+import updateGameNode from './gameNodeModule.js'
 socket=new WebSocket('ws://'+window.location.hostname+':8080')
 console.log('!')
 socket.onmessage=e=>{

@@ -4,17 +4,20 @@ var extractCookie = require('./serverModule').extractCookie
 var getKey = require('./userModule').getKey
 var getUser = require('./userModule').getUser
 module.exports=async(path,req,res)=>{
-    path=path.split('/')
+    path=path.split('/')[0]
     console.log('Path:'+path)
     console.log(req.method==='GET')
+    console.log(path.length)
     if(req.method==='GET'){
-        var cookie = extractCookie(req)
-        res.writeHead(200,{'Content-Type':'text/html'})
-        console.log(typeof(getUser(cookie)))
-        if(typeof(getUser(cookie))==='number')
-            return fs.createReadStream('data/main.html').pipe(res)
-        else
-            return fs.createReadStream('data/login.html').pipe(res)
+        if(path===''){
+            var cookie = extractCookie(req)
+            res.writeHead(200,{'Content-Type':'text/html'})
+            console.log(typeof(getUser(cookie)))
+            if(typeof(getUser(cookie))==='number')
+                return fs.createReadStream('data/main.html').pipe(res)
+            else
+                return fs.createReadStream('data/login.html').pipe(res)
+        }
     }
     else if(req.method==='POST'){
         var user_data = JSON.parse(await extractBody(req))

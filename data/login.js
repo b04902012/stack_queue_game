@@ -1,5 +1,4 @@
 import Fetch from './modules/fetchModule.js'
-import getGameNode from './modules/gameNodeModule.js'
 var data
 console.log('!')
 window.addEventListener('load', async ()=>{
