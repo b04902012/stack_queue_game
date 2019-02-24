@@ -3,7 +3,6 @@ var extractBody=async(req)=>{
         let body=''
         req.on('data',chunk=>{
             body+=chunk.toString()
-            console.log(body)
         })
         req.on('end',()=>{
             res(body)

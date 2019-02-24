@@ -68,5 +68,5 @@ ws_srv.on('connection',(socket,req)=>{
             var request = JSON.parse(message);
             game.DoMove(user, request[1], request[0]);
         })
-    }
+   }
 })

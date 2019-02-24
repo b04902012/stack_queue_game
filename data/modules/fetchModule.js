@@ -4,6 +4,7 @@ const Fetch=(url,data)=>{
         mode: "same-origin",
         credentials: "include",
     })
+    console.log(data)
     return fetch(url,{
         method: "POST",
         body:data,
