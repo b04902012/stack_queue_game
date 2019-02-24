@@ -8,3 +8,10 @@ socket.onmessage=e=>{
     socket.send(data.id)
     updateGameNode(data)
 }
+
+var send = (round_id, choice) => {
+    var data = JSON.parse([round_id, choice])
+    socket.send(data)
+}
+
+export default send
