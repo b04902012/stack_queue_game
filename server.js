@@ -58,12 +58,13 @@ var reliable_send = async (socket, user, data) => {
     var retry_count = 0;
     var interval_id;
     var retry = () => {
-        console.log('Retry user', user);
         if (socket_acked_id[user].s.has(ack_id)) {
+            console.log('user', user, 'acked message pack', ack_id);
             clearInterval(interval_id);
             socket_acked_id[user].s.delete(ack_id);
             return;
         }
+        console.log('Retry user', user, 'of message pack', ack_id);
         retry_count++;
         if (retry_count > kRetryTimes) {
             clearInterval(interval_id);
@@ -73,11 +74,15 @@ var reliable_send = async (socket, user, data) => {
             return;
         }
         // TODO: check if send failed
-        socket.send(data_pack);
+        try {
+            socket.send(data_pack);
+        } catch (e) {
+            socket_acked_id[user].s.delete(ack_id);
+            socket_table[user].delete(socket);
+        }
     }
     interval_id = setInterval(retry, kRetryTimeout);
 }
-console.log(socket_acked_id);
 
 srv.listen('8080')
 const ws_srv=new ws.Server({server:srv})
@@ -101,16 +106,15 @@ var game = new gameModule.Game(3, "iio", [-1, 2, -1], update, 10)
 
 ws_srv.on('connection',(socket,req)=>{
     var cookie=serverModule.extractCookie(req)
-    console.log(cookie)
     var user = userModule.getUser(cookie)
     if(typeof(user)==='number'){
         socket_table[user].add(socket)
-        console.log(req.headers)
         reliable_send(socket, user, cache_data)
         socket.on('message',(message)=>{
             var request = JSON.parse(message);
+            console.log(request);
             if (typeof(request) === 'number')
-                socket_acked_id[user].add(request);
+                socket_acked_id[user].s.add(request);
             else
                 game.DoMove(user, request[1], request[0]);
         })

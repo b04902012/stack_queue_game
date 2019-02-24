@@ -5,5 +5,6 @@ console.log('!')
 socket.onmessage=e=>{
     console.log(e.data)
     var data = JSON.parse(e.data)
+    socket.send(data.id)
     updateGameNode(data)
 }
