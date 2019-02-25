@@ -23,8 +23,12 @@
     -webkit-user-select:none;
     -ms-user-select:none;
     cursor:pointer;
+    display:inline-block;
 }
 #login:hover{
     background-color:#494;
     color:black;
+}
+.cancel{
+    display:none;
 }

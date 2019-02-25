@@ -15,6 +15,7 @@ body{
     color:#ddd;
 }
 .game_container{
+    position:relative;
     width:800px;
     background-color:rgb(20,40,40);
     color:#ddd;
@@ -24,13 +25,28 @@ body{
     color:white;
     white-space:pre;
 }
-.stack_button{
+.stack_button, .queue_button{
     user-select:none;
     cursor:pointer;
 }
-.queue_button{
-    user-select:none;
-    cursor:pointer;
+.stack_button.disabled, .stack_button.disabled:hover{
+    cursor:not-allowed;
+    background:rgb(20,40,40);
+    color:#AAF;
+}
+
+.queue_button.disabled, .queue_button.disabled:hover{
+    cursor:not-allowed;
+    background:rgb(20,40,40);
+    color:#AFA;
+}
+.stack_button:hover{
+    background:#AAF;
+    color:black;
+}
+.queue_button:hover{
+    background:#AFA;
+    color:black;
 }
 .stack{
     color:#AAF;

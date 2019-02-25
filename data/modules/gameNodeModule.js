@@ -87,6 +87,14 @@ var updateGameNode=(data)=>{
         if(data.u[i].d)
             rank_list[i].d.classList.add('sent')
     if(!pre_data||data.r>pre_data.r){
+        if(data.p[data.r]==='i')
+            operation_list[data.r].innerText = 'Push'
+        if(data.p[data.r]==='o')
+            operation_list[data.r].innerText = 'Pop'
+        if(data.p[data.r]==='e')
+            operation_list[data.r].innerText = 'End'
+        if(data.p[data.r]==='?')
+            operation_list[data.r].innerText = '???'
         for(let i=0;i<data.p.length;i++)
             operation_list[i].classList.remove('current_operation')
         operation_list[data.r].classList.add('current_operation')
@@ -124,6 +132,14 @@ var updateGameNode=(data)=>{
             stack_list.pop()
         if(data.u[id].d==='q')
             queue_list.shift()
+    }
+    if(data.u[id].d){
+        queue_button.classList.add('disabled')
+        stack_button.classList.add('disabled')
+    }
+    else{
+        queue_button.classList.remove('disabled')
+        stack_button.classList.remove('disabled')
     }
     rank_list[id].d.classList.add('self_rank')
     stack_content.innerText = JSON.stringify(stack_list.reverse())
