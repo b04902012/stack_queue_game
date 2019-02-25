@@ -62,7 +62,7 @@ function User() {
   }
 }
 
-function Game(number_user, operation_sequance, number_sequance, broad_cast, max_value) {
+function Game(number_user, operation_sequance, number_sequance, broadcast, max_value) {
   if (operation_sequance.length !== number_sequance.length)
     throw new Error("Length for operation and number not match");
 
@@ -104,7 +104,7 @@ function Game(number_user, operation_sequance, number_sequance, broad_cast, max_
       SetNewRoundRandomConfigure()
     for (let i = 0; i < number_user; i++)
       cached_user_data_[i] = user_list_[i].ExportState(current_round_);
-    broad_cast(GenerateBroadcastData());
+    broadcast(GenerateBroadcastData());
   }
 
   this.DoMove = (user_id, container, round_id) => {
@@ -132,8 +132,8 @@ function Game(number_user, operation_sequance, number_sequance, broad_cast, max_
     console.log(success);
     if (success) {
       finished_user_++;
-      cached_user_data_[user_id].d = true;
-      broad_cast(GenerateBroadcastData());
+      cached_user_data_[user_id].d = container;
+      broadcast(GenerateBroadcastData());
       if (finished_user_ == number_user)
         CheckAndStartNewRound();
     }
@@ -143,7 +143,7 @@ function Game(number_user, operation_sequance, number_sequance, broad_cast, max_
 }
 
 module.exports = {
-    Game
+  Game
 }
 /*
 test = new Game(3, "iio", [-1, -1, -1], (s) => {console.log(s)}, 10)

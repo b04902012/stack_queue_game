@@ -96,9 +96,14 @@ var cache_data = ""
 var update = data=>{
     cache_data = data
     data.m = name_list
-    socket_table.forEach((socket_set, id)=>{
+    socket_table.forEach((socket_set, user)=>{
+        var send_data = DeepCopy(data);
+        send_data.u.forEach((u, id) => {
+            if (id !== user && u.d !== false)
+                send_data.u[id].d = true;
+        })
         socket_set.forEach(socket=>{
-            reliable_send(socket, id, data)
+            reliable_send(socket, user, send_data)
         })
     })
     console.log(data)
