@@ -56,7 +56,6 @@ var reliable_send = async (socket, user, data) => {
     var data_pack = DeepCopy(data);
     data_pack.id = ack_id;
     data_pack = JSON.stringify(data_pack);
-    socket.send(data_pack);
     var retry_count = 0;
     var interval_id;
     var retry = () => {
@@ -84,6 +83,7 @@ var reliable_send = async (socket, user, data) => {
         }
     }
     interval_id = setInterval(retry, kRetryTimeout);
+    retry();
 }
 
 srv.listen('8080')
