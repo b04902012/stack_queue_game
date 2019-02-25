@@ -56,7 +56,7 @@ var reliable_send = async (socket, user, data) => {
     var data_pack = DeepCopy(data);
     data_pack.id = ack_id;
     data_pack = JSON.stringify(data_pack);
-    var retry_count = 0;
+    var retry_count = -1;
     var interval_id;
     var retry = () => {
         if (socket_acked_id[user].s.has(ack_id)) {
@@ -65,8 +65,8 @@ var reliable_send = async (socket, user, data) => {
             socket_acked_id[user].s.delete(ack_id);
             return;
         }
-        console.log('Retry user', user, 'of message pack', ack_id);
         retry_count++;
+        console.log('Send user', user, 'of message pack', ack_id, ', tried ' + retry_count);
         if (retry_count > kRetryTimes) {
             clearInterval(interval_id);
             socket_acked_id[user].s.delete(ack_id);
@@ -74,9 +74,11 @@ var reliable_send = async (socket, user, data) => {
             socket_table[user].delete(socket)
             return;
         }
-        // TODO: check if send failed
         try {
-            socket.send(data_pack);
+            if (retry_count === 0)
+                socket.send(data_pack);
+            else
+                socket.send('');
         } catch (e) {
             socket_acked_id[user].s.delete(ack_id);
             socket_table[user].delete(socket);
