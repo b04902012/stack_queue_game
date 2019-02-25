@@ -7,6 +7,10 @@ function RandInt(min, max) {
 function DeepCopy(x) {
   return JSON.parse(JSON.stringify(x));
 }
+// https://stackoverflow.com/a/1431113
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
 
 function User() {
   var queue_ = Array();
@@ -22,7 +26,6 @@ function User() {
   }
 
   this.PushQueue = (round, x) => {
-    console.log(RoundCheck(round))
     if (!RoundCheck(round))
       return false;
     queue_.push(x);
@@ -39,7 +42,6 @@ function User() {
     return true;
   }
   this.PushStack = (round, x) => {
-    console.log(x);
     if (!RoundCheck(round))
       return false;
     stack_.push(x);
@@ -86,9 +88,9 @@ function Game(number_user, operation_sequance, number_sequance, broadcast, max_v
   var SetNewRoundRandomConfigure = () => {
     if (operation_sequance[current_round_] === "?") {
       if (RandInt(0, 1) === 0)
-        operation_sequance[current_round_] = 'i';
+        operation_sequance = operation_sequance.replaceAt(current_round_, 'i');
       else
-        operation_sequance[current_round_] = 'o';
+        operation_sequance = operation_sequance.replaceAt(current_round_, 'o');
     }
     if (operation_sequance[current_round_] === "i"
           && number_sequance[current_round_] <= 0) {
