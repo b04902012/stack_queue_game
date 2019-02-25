@@ -50,6 +50,7 @@ var getGameData=()=>{
 
 var updateGameNode=(data)=>{
     console.log(data)
+    data.p+='e'
     if(!rank_list.length){
         for(let i=0;i<data.m.length;i++){
             rank_list.push({
@@ -74,6 +75,8 @@ var updateGameNode=(data)=>{
                 operation_list[i].innerText = 'Push'
             if(data.p[i]==='o')
                 operation_list[i].innerText = 'Pop'
+            if(data.p[i]==='e')
+                operation_list[i].innerText = 'End'
             if(data.p[i]==='?')
                 operation_list[i].innerText = '???'
             operation_list[i].classList.add('operation')
@@ -91,6 +94,8 @@ var updateGameNode=(data)=>{
             current_operation_node.innerText = 'Please push '+ data.n[data.r].toString()+'.'
         else if(data.p[data.r]==='o')
             current_operation_node.innerText = 'Please pop.'
+        else if(data.p[data.r]==='e')
+            current_operation_node.innerText = 'Game over.'
         for(var i=0;i<data.m.length;i++){
             if(!data.u[i].d)
                 rank_list[i].d.classList.remove('sent')
