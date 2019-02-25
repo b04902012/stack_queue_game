@@ -114,10 +114,11 @@ for(let i=0;i<kUserNumber;i++)
     name_list[i]=userList[i].user
 var cache_data = ""
 var update = data=>{
-    cache_data = data
     data.m = name_list
     socket_table.forEach((socket_set, user)=>{
         var send_data = DeepCopy(data);
+        for (let i = send_data.r + 1; i < send_data.n.length; i++)
+            send_data.n[i] = -1;
         send_data.u.forEach((u, id) => {
             if (id !== user && u.d !== false)
                 send_data.u[id].d = true;
@@ -125,6 +126,7 @@ var update = data=>{
         socket_set.forEach(socket=>{
             reliable_send(socket, user, send_data)
         })
+        cache_data = send_data;
     })
     console.log(data)
 }
@@ -132,7 +134,7 @@ var update = data=>{
 for(var user in userList)
     socket_table[user]=new Set()
 
-var game = new gameModule.Game(kUserNumber, gameConfig[0], gameConfig[1], update, 10)
+var game = new gameModule.Game(kUserNumber, gameConfig[0], gameConfig[1], update, gameConfig[2])
 
 ws_srv.on('connection',(socket,req)=>{
     var cookie=serverModule.extractCookie(req)
