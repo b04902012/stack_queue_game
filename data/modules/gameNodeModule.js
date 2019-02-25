@@ -91,16 +91,21 @@ var updateGameNode=(data)=>{
         for(var i=0;i<data.m.length;i++){
             if(!data.u[i].d)
                 rank_list[i].d.classList.remove('sent')
-            rank_list[i].n=100000
+            rank_list[i].n=100000+i
             data.u[i].s.forEach(k=>rank_list[i].n+=k)
             data.u[i].q.forEach(k=>rank_list[i].n+=k)
             rank_list[i].s.innerText=rank_list[i].n.toString()
         }
-        var sorted_list=rank_list.sort(sorted_list,(a,b)=>{return a.n<b.n})
+        var sorted_list=rank_list.slice()
+        sorted_list.sort((a,b)=>{return b.n-a.n})
+        console.log(sorted_list)
+        for(let i=0;i<sorted_list.length;i++)
+            rank_node.appendChild(sorted_list[i].d)
     }
     var id = cookieModule.get('id')
     var stack_list = data.u[id].s
     var queue_list = data.u[id].q
+    rank_list[id].d.classList.add('self_rank')
     stack_content.innerText = JSON.stringify(stack_list.reverse())
     queue_content.innerText = JSON.stringify(queue_list.reverse())
     pre_data = data

@@ -41,6 +41,9 @@
     height:30px;
     width:100%;
 }
+.rank>.self_rank{
+    color:#FF4;
+}
 .rank > .sent{
     background-color:#300;
 }

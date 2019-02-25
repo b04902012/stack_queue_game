@@ -13,6 +13,8 @@ var gameModule = require('./gameModule')
 var kRetryTimeout = 500;
 var kRetryTimes = 5;
 
+var kUserNumber = 2;
+
 // Simple deep copy function, should be good enough
 // https://stackoverflow.com/a/34283281
 function DeepCopy(x) {
@@ -46,7 +48,7 @@ var srv=http.createServer(async function(req,res){
     })
 })
 
-var socket_acked_id = new Array(userList.length);
+var socket_acked_id = new Array(kUserNumber);
 for (let i = 0; i < socket_acked_id.length; i++)
     socket_acked_id[i] = {s:new Set(), m: 0};
 var reliable_send = async (socket, user, data) => {
@@ -86,9 +88,9 @@ var reliable_send = async (socket, user, data) => {
 
 srv.listen('8080')
 const ws_srv=new ws.Server({server:srv})
-var socket_table = new Array(userList.length)
-var name_list = new Array(userList.length)
-for(let i=0;i<userList.length;i++)
+var socket_table = new Array(kUserNumber)
+var name_list = new Array(kUserNumber)
+for(let i=0;i<kUserNumber;i++)
     name_list[i]=userList[i].user
 var cache_data = ""
 var update = data=>{
@@ -106,7 +108,7 @@ for(var user in userList)
     socket_table[user]=new Set()
 
 // TODO: set game arguments
-var game = new gameModule.Game(3, "iio", [-1, 2, -1], update, 10)
+var game = new gameModule.Game(kUserNumber, "iio", [-1, 2, -1], update, 10)
 
 ws_srv.on('connection',(socket,req)=>{
     var cookie=serverModule.extractCookie(req)
