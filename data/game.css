@@ -1,5 +1,27 @@
-.game_container *{
+.container{
     font-family:monospace;
+    font-size:20px;
+    width:100%;
+    height:100vh;
+}
+.container td{
+    vertical-align:top;
+}
+.operation_container{
+    color:#ddd;
+}
+.game_container{
+    width:800px;
+    background-color:rgb(20,40,40);
+    color:#ddd;
+}
+.stack_button{
+    user-select:none;
+    cursor:pointer;
+}
+.queue_button{
+    user-select:none;
+    cursor:pointer;
 }
 .stack{
     color:#AAF;
@@ -8,4 +30,21 @@
 .queue{
     color:#AFA;
     white-space: pre;
+}
+.rank{
+}
+.rank > div{
+    position:relative;
+    color:#999;
+    background-color:darkred;
+    white-space:pre;
+    height:30px;
+    width:100%;
+}
+.rank > .sent{
+    background-color:#300;
+}
+.score{
+    position:absolute;
+    right:0em;
 }

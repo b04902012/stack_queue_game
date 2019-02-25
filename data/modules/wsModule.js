@@ -8,6 +8,7 @@ socket.onmessage=e=>{
     console.log(e.data)
     var data = JSON.parse(e.data)
     socket.send(data.id)
+    console.log(data)
     updateGameNode(data)
 }
 

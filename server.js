@@ -87,9 +87,13 @@ var reliable_send = async (socket, user, data) => {
 srv.listen('8080')
 const ws_srv=new ws.Server({server:srv})
 var socket_table = new Array(userList.length)
+var name_list = new Array(userList.length)
+for(let i=0;i<userList.length;i++)
+    name_list[i]=userList[i].user
 var cache_data = ""
 var update = data=>{
     cache_data = data
+    data.m = name_list
     socket_table.forEach((socket_set, id)=>{
         socket_set.forEach(socket=>{
             reliable_send(socket, id, data)

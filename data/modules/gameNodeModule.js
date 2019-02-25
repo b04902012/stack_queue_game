@@ -1,16 +1,25 @@
 import cookieModule from './cookieModule.js'
 
 var pre_data
-var gameNode
+var operation_node
+var game_node
 var stack_node
 var queue_node
 var stack_button
 var queue_button
 var stack_content
 var queue_content
+var operation_list=[]
 var rank_node
 var rank_list=[]
-gameNode = document.getElementsByClassName('game_container')[0]
+operation_node = document.getElementsByClassName('operation_container')[0]
+game_node = document.getElementsByClassName('game_container')[0]
+rank_node = document.getElementsByClassName('rank_container')[0]
+var title_node = document.createTextNode(`
+ `)
+
+var current_operation_node = document.createElement('div')
+game_node.appendChild(current_operation_node)
 stack_node = document.createElement('div')
 queue_node = document.createElement('div')
 stack_node.classList.add('stack')
@@ -32,11 +41,9 @@ queue_node.appendChild(queue_button)
 queue_node.appendChild(document.createTextNode('   ->  '))
 queue_node.appendChild(queue_content)
 queue_node.appendChild(document.createTextNode('  ->'))
-gameNode.appendChild(queue_node)
-gameNode.appendChild(stack_node)
-rank_node = document.createElement('div')
+game_node.appendChild(queue_node)
+game_node.appendChild(stack_node)
 rank_node.classList.add('rank')
-gameNode.appendChild(rank_node)
 var getGameData=()=>{
     return pre_data
 }
@@ -52,20 +59,39 @@ var updateGameNode=(data)=>{
                 s:document.createElement('span'),
             })
             rank_list[i].m.innerText=data.m[i]
-            rank_list[i].s.innerText='0'
+            rank_list[i].m.classList.add('name')
+            rank_list[i].s.classList.add('score')
             rank_list[i].d.appendChild(rank_list[i].m)
             rank_list[i].d.appendChild(rank_list[i].s)
             rank_node.appendChild(rank_list[i].d)
+            console.log(i)
+        }
+    }
+    if(!operation_list.length){
+        for(let i=0;i<data.p.length;i++){
+            operation_list.push(document.createElement('div'))
+            if(data.p[i]==='i')
+                operation_list[i].innerText = 'Push'
+            if(data.p[i]==='o')
+                operation_list[i].innerText = 'Pop'
+            if(data.p[i]==='?')
+                operation_list[i].innerText = '???'
+            operation_list[i].classList.add('operation')
+            operation_node.appendChild(operation_list[i])
         }
     }
     for(var i=0;i<data.m.length;i++)
         if(data.u[i].d)
             rank_list[i].d.classList.add('sent')
     if(!pre_data||data.r>pre_data.r){
+        if(data.p[data.r]==='i')
+            current_operation_node.innerText = 'Please push '+ data.n[data.r].toString()+'.'
+        else if(data.p[data.r]==='o')
+            current_operation_node.innerText = 'Please pop.'
         for(var i=0;i<data.m.length;i++){
             if(!data.u[i].d)
                 rank_list[i].d.classList.remove('sent')
-            rank_list[i].n=0
+            rank_list[i].n=100000
             data.u[i].s.forEach(k=>rank_list[i].n+=k)
             data.u[i].q.forEach(k=>rank_list[i].n+=k)
             rank_list[i].s.innerText=rank_list[i].n.toString()
