@@ -113,20 +113,24 @@ var name_list = new Array(kUserNumber)
 for(let i=0;i<kUserNumber;i++)
     name_list[i]=userList[i].user
 var cache_data = ""
+var generateCensoredData = (data, user) => {
+    var censored_data = DeepCopy(data);
+    for (let i = censored_data.r + 1; i < censored_data.n.length; i++)
+        censored_data.n[i] = -1;
+    censored_data.u.forEach((u, id) => {
+        if (id !== user && u.d !== false)
+            censored_data.u[id].d = true;
+    })
+    return censored_data;
+}
 var update = data=>{
     data.m = name_list
+    cache_data = DeepCopy(data);
     socket_table.forEach((socket_set, user)=>{
-        var send_data = DeepCopy(data);
-        for (let i = send_data.r + 1; i < send_data.n.length; i++)
-            send_data.n[i] = -1;
-        send_data.u.forEach((u, id) => {
-            if (id !== user && u.d !== false)
-                send_data.u[id].d = true;
-        })
+        var send_data = generateCensoredData(data, user);
         socket_set.forEach(socket=>{
             reliable_send(socket, user, send_data)
         })
-        cache_data = send_data;
     })
     console.log(data)
 }
@@ -141,7 +145,7 @@ ws_srv.on('connection',(socket,req)=>{
     var user = userModule.getUser(cookie)
     if(typeof(user)==='number'){
         socket_table[user].add(socket)
-        reliable_send(socket, user, cache_data)
+        reliable_send(socket, user, generateCensoredData(cache_data, user))
         socket.on('message',(message)=>{
             var request = JSON.parse(message);
             console.log(request);
