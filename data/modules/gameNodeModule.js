@@ -84,6 +84,9 @@ var updateGameNode=(data)=>{
         if(data.u[i].d)
             rank_list[i].d.classList.add('sent')
     if(!pre_data||data.r>pre_data.r){
+        for(let i=0;i<data.p.length;i++)
+            operation_list[i].classList.remove('current_operation')
+        operation_list[data.r].classList.add('current_operation')
         if(data.p[data.r]==='i')
             current_operation_node.innerText = 'Please push '+ data.n[data.r].toString()+'.'
         else if(data.p[data.r]==='o')

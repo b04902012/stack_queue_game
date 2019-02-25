@@ -1,3 +1,7 @@
+body{
+    padding:0;
+    overflow:hidden;
+}
 .container{
     font-family:monospace;
     font-size:20px;
@@ -14,6 +18,11 @@
     width:800px;
     background-color:rgb(20,40,40);
     color:#ddd;
+}
+.title{
+    font-size:15px;
+    color:white;
+    white-space:pre;
 }
 .stack_button{
     user-select:none;
@@ -50,4 +59,8 @@
 .score{
     position:absolute;
     right:0em;
+}
+.current_operation{
+    background-color:yellow;
+    color:black;
 }
