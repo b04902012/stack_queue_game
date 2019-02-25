@@ -115,7 +115,7 @@ for(var user in userList)
     socket_table[user]=new Set()
 
 // TODO: set game arguments
-var game = new gameModule.Game(kUserNumber, "iio", [-1, 2, -1], update, 10)
+var game = new gameModule.Game(kUserNumber, "ii?o", [-1, 2,-1, -1], update, 10)
 
 ws_srv.on('connection',(socket,req)=>{
     var cookie=serverModule.extractCookie(req)

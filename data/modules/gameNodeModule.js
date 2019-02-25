@@ -99,7 +99,7 @@ var updateGameNode=(data)=>{
         for(var i=0;i<data.m.length;i++){
             if(!data.u[i].d)
                 rank_list[i].d.classList.remove('sent')
-            rank_list[i].n=100000+i
+            rank_list[i].n=0
             data.u[i].s.forEach(k=>rank_list[i].n+=k)
             data.u[i].q.forEach(k=>rank_list[i].n+=k)
             rank_list[i].s.innerText=rank_list[i].n.toString()
