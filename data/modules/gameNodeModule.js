@@ -92,9 +92,9 @@ var updateGameNode=(data)=>{
         operation_list[data.r].classList.add('current_operation')
         if(data.p[data.r]==='i')
             current_operation_node.innerText = 'Please push '+ data.n[data.r].toString()+'.'
-        else if(data.p[data.r]==='o')
+        if(data.p[data.r]==='o')
             current_operation_node.innerText = 'Please pop.'
-        else if(data.p[data.r]==='e')
+        if(data.p[data.r]==='e')
             current_operation_node.innerText = 'Game over.'
         for(var i=0;i<data.m.length;i++){
             if(!data.u[i].d)
@@ -113,6 +113,18 @@ var updateGameNode=(data)=>{
     var id = cookieModule.get('id')
     var stack_list = data.u[id].s
     var queue_list = data.u[id].q
+    if(data.p[data.r]==='i'){
+        if(data.u[id].d==='s')
+            stack_list.push(data.n[data.r])
+        if(data.u[id].d==='q')
+            queue_list.push(data.n[data.r])
+    }
+    if(data.p[data.r]==='o'){
+        if(data.u[id].d==='s')
+            stack_list.pop()
+        if(data.u[id].d==='q')
+            queue_list.shift()
+    }
     rank_list[id].d.classList.add('self_rank')
     stack_content.innerText = JSON.stringify(stack_list.reverse())
     queue_content.innerText = JSON.stringify(queue_list.reverse())
