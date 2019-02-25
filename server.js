@@ -10,10 +10,28 @@ var userModule = require('./userModule')
 var userList = require('./userList')
 var gameModule = require('./gameModule')
 
-var kRetryTimeout = 500;
-var kRetryTimes = 5;
+const kRetryTimeout = 500;
+const kRetryTimes = 5;
 
-var kUserNumber = 2;
+if (process.argv.length !== 4) {
+  // Use hard coded file name for now
+  console.log('Usage: node server.js [game configuration (json format)] [number of players (including TA)]')
+  process.exit(1);
+}
+var gameConfig = fs.readFileSync(process.argv[2], 'ascii');
+gameConfig = JSON.parse(gameConfig);
+console.log(gameConfig);
+const kUserNumber = parseInt(process.argv[3]);
+console.log('number of user:', kUserNumber);
+if (!(kUserNumber > 0)) {
+  console.log('Usage: node server.js [game configuration (json format)] [number of players (including TA)]')
+  console.log('Error: Argument [number of players] is NOT a positive integer');
+  process.exit(1);
+}
+if (kUserNumber > userList.length) {
+  console.log('Error: number of user set in argument is MORE THAN that in userList.js');
+  process.exit(1);
+}
 
 // Simple deep copy function, should be good enough
 // https://stackoverflow.com/a/34283281
@@ -114,8 +132,7 @@ var update = data=>{
 for(var user in userList)
     socket_table[user]=new Set()
 
-// TODO: set game arguments
-var game = new gameModule.Game(kUserNumber, "ii?o", [-1, 2,-1, -1], update, 10)
+var game = new gameModule.Game(kUserNumber, gameConfig[0], gameConfig[1], update, 10)
 
 ws_srv.on('connection',(socket,req)=>{
     var cookie=serverModule.extractCookie(req)
