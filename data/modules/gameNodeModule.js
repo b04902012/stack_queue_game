@@ -133,7 +133,7 @@ var updateGameNode=(data)=>{
         if(data.u[id].d==='q')
             queue_list.shift()
     }
-    if(data.u[id].d){
+    if(data.u[id].d||data.r===data.n.length){
         queue_button.classList.add('disabled')
         stack_button.classList.add('disabled')
     }
