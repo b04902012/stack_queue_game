@@ -49,7 +49,6 @@ var getGameData=()=>{
 }
 
 var updateGameNode=(data)=>{
-    console.log(data)
     data.p+='e'
     if(!rank_list.length){
         for(let i=0;i<data.m.length;i++){
@@ -65,7 +64,6 @@ var updateGameNode=(data)=>{
             rank_list[i].d.appendChild(rank_list[i].m)
             rank_list[i].d.appendChild(rank_list[i].s)
             rank_node.appendChild(rank_list[i].d)
-            console.log(i)
         }
     }
     if(!operation_list.length){
@@ -114,7 +112,6 @@ var updateGameNode=(data)=>{
         }
         var sorted_list=rank_list.slice()
         sorted_list.sort((a,b)=>{return b.n-a.n})
-        console.log(sorted_list)
         for(let i=0;i<sorted_list.length;i++)
             rank_node.appendChild(sorted_list[i].d)
     }
